@@ -11,6 +11,24 @@ namespace Maui.Controls.Sample.Pages.Base
 	{
 		SectionModel _selectedItem;
 
+		public int _positionSelected = 0;
+
+		public int PositionSelected
+		{
+			set
+			{
+				if (_positionSelected != value)
+				{
+					_positionSelected = value;
+
+					OnPropertyChanged();
+				}
+			}
+			get => _positionSelected;
+		}
+
+		public ICommand TabCommand { get; }
+
 		public BasePage()
 		{
 			Application.Current.Resources.TryGetValue("LightBackgroundColor", out object lightBackgroundResource);
@@ -31,6 +49,8 @@ namespace Maui.Controls.Sample.Pages.Base
 					SelectedItem = null;
 				}
 			});
+
+			TabCommand = new Command<string>((param) => PositionSelected = int.Parse(param));
 
 			ToolbarItems.Add(new ToolbarItem()
 			{
@@ -56,6 +76,8 @@ namespace Maui.Controls.Sample.Pages.Base
 		}
 
 		public ICommand NavigateCommand { get; }
+
+
 
 		public SectionModel SelectedItem
 		{

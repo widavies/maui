@@ -7,128 +7,48 @@
     xmlns:local="clr-namespace:Maui.Controls.Sample"
     x:Name="HomePage"
     NavigationPage.IconColor="White"
+    ControlTemplate="{DynamicResource Tab1}"
     Title="Gallery">
-    <views:BasePage.Resources>
+    <ContentPage.Resources>
         <ResourceDictionary>
+            <ControlTemplate x:Key="Tab1">
+                <StackLayout>
+                    <ContentPresenter />
+                    <Label>TAB 1</Label>
+                    
+                </StackLayout>
+            </ControlTemplate>
+            <ControlTemplate x:Key="Tab2">
+                <StackLayout>
+                    <ContentPresenter />
+                    <Label>TAB 2</Label>
+                </StackLayout>
 
-            <Style x:Key="TitleStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="Title" />
-                <Setter Property="FontFamily" Value="Segoe UI Bold" />
-                <Setter Property="TextColor" Value="{DynamicResource DarkTextPrimaryColor}" />
-                <Setter Property="HorizontalOptions" Value="Center" />
-                <Setter Property="Margin" Value="0, 24, 0, 0" />
-            </Style>
-
-            <Style x:Key="SubTitleStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="Small" />
-                <Setter Property="FontFamily" Value="Segoe UI" />
-                <Setter Property="TextColor" Value="{DynamicResource DarkTextPrimaryColor}" />
-                <Setter Property="HorizontalTextAlignment" Value="Center" />
-                <Setter Property="HorizontalOptions" Value="Center" />
-                <Setter Property="Margin" Value="24, 12" />
-            </Style>
-
-            <Color x:Key="SectionItemBorderColor">#C8C8C8</Color>
-
-            <Style x:Key="SectionItemContainerStyle" TargetType="Border">
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightBackgroundSecondaryColor}, Dark={StaticResource DarkBackgroundSecondaryColor}}" />
-                <Setter Property="Stroke" Value="{StaticResource SectionItemBorderColor}" />
-                <Setter Property="HeightRequest" Value="120" />
-                <Setter Property="Padding" Value="12" />
-                <Setter Property="Margin" Value="0" />
-                <Setter Property="FlexLayout.Basis" Value="50%"/>
-                <Setter Property="FlexLayout.Grow" Value="0"/>
-            </Style>
-
-            <Style x:Key="FooterStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="Small" />
-                <Setter Property="FontFamily" Value="Segoe UI" />
-                <Setter Property="HorizontalOptions" Value="Center" />
-                <Setter Property="VerticalOptions" Value="End" />
-                <Setter Property="Margin" Value="24" />
-            </Style>
-
+            </ControlTemplate>
         </ResourceDictionary>
-    </views:BasePage.Resources>
-    <ScrollView>
-        <Grid
-            RowDefinitions="150, *, Auto"
-            RowSpacing="0">
-            <!-- HEADER -->
-            <Image
-                Grid.Row="0"
-                Aspect="AspectFill"
-                Source="header_background.png"/>
-            <Grid
-                RowSpacing="0"
-                Grid.Row="0"
-                RowDefinitions="Auto,*">
-                <Label
-                    Text=".NET MAUI"
-                    Style="{StaticResource TitleStyle}">
-                    <!-- 
-                    <Label.Shadow>
-                        <Shadow 
-                            Brush="White"
-                            Opacity="0.5"
-                            Radius="12"
-                            Offset="6, 6" />
-                    </Label.Shadow>
-                    -->
-                </Label>
-                <Label
-                    Grid.Row="1"
-                    Text="An open-source framework for building iOS, Android, macOS and Windows apps"
-                    Style="{StaticResource SubTitleStyle}"/>
-            </Grid>
-            <!-- SECTIONS -->
-            <Grid
-                Grid.Row="1"
-                Margin="12">
-                <CollectionView 
-                    x:Name="HomeSections"
-                    BackgroundColor="Transparent"
-                    ItemsSource="{Binding Items}"
-                    SelectionMode="Single"    
-                    SelectedItem="{Binding SelectedItem, Source={x:RelativeSource AncestorType={x:Type ContentPage}}, Mode=TwoWay}"
-                    SelectionChangedCommand="{Binding NavigateCommand, Source={x:Reference HomePage}}"
-                    Margin="6, 12, 6, 0">
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout
-                            Orientation="Vertical"
-                            Span="2"
-                            HorizontalItemSpacing="6"
-                            VerticalItemSpacing="6"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Border
-                               Style="{StaticResource SectionItemContainerStyle}">
-                                <Border.StrokeShape>
-                                    <RoundRectangle 
-                                        CornerRadius="0" />
-                                </Border.StrokeShape>
-                                <Grid
-                                   RowSpacing="0"
-                                   RowDefinitions="Auto, *">
-                                    <Label
-                                       Text="{Binding Title}"
-                                       Style="{StaticResource GalleryItemTitleStyle}"/>
-                                    <Label
-                                       Grid.Row="1"
-                                       Text="{Binding Description}"
-                                       Style="{StaticResource GalleryItemDescriptionStyle}"/>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Grid>
-            <!-- FOOTER -->
-            <Label
-                Grid.Row="2"
-                Text="{Binding Path=Year, Source={x:Static sys:DateTime.Now}, StringFormat='Microsoft Corporation © {0}'}"
-                Style="{StaticResource FooterStyle}" />
-        </Grid>
-    </ScrollView>
+    </ContentPage.Resources>
+    <ContentPage.Triggers>
+        <DataTrigger TargetType="ContentPage"
+                     Binding="{Binding PositionSelected, Source={x:Reference HomePage}}"
+                     Value="1">
+            <Setter Property="ControlTemplate" Value="{DynamicResource Tab1}" />
+        </DataTrigger>
+        <DataTrigger TargetType="ContentPage"
+                     Binding="{Binding PositionSelected, Source={x:Reference HomePage}}"
+                     Value="2">
+            <Setter Property="ControlTemplate" Value="{DynamicResource Tab2}" />
+        </DataTrigger>
+    </ContentPage.Triggers>
+    <StackLayout>
+        <Button Text="Tab1"
+                Command="{Binding TabCommand, Source={x:Reference HomePage}}"
+                HeightRequest="50"
+                CommandParameter="1">
+        </Button>
+        <Button Text="Tab2"
+                Command="{Binding TabCommand, Source={x:Reference HomePage}}"
+                HeightRequest="50"
+                CommandParameter="2">
+        </Button>
+    </StackLayout>
 </views:BasePage>
